@@ -1,9 +1,8 @@
 import sys
 sys.path.append("./Estruturas de Dados")
 sys.path.append("./Grafos")
+sys.path.append("./Exceptions")
 
 import Original
 
-rede = Original.Original()
-rede.montar()
-rede.desenhar()
+rede = Rede.Rede()
