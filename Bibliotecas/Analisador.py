@@ -1,4 +1,4 @@
-import numpy as np, matplotlib.pyplot as plt, networkx as nx
+import numpy as np, matplotlib.pyplot as plt, networkx as nx, copy as cp
 
 
 def encontrar_importância_total(rede):
@@ -42,6 +42,19 @@ def remover_nós_falha(rede, probabilidade):
 
     rede.remove_nodes_from(para_deletar)
 
+def simular_falha(rede, probabilidade):
+    remover_nós_falha(rede, probabilidade)
+
+    componentes_conectadas = nx.connected_components(rede)
+
+    if(nx.number_connected_components(rede) == 0):
+        return 0, 0
+    
+    maior_cluster = max(componentes_conectadas, key=(lambda item: encontrar_importância_componente(item,rede)))
+    maior_cluster = rede.subgraph(maior_cluster).copy()
+
+    return encontrar_importância_total(maior_cluster), encontrar_latência_efetiva_média(maior_cluster)
+
 def gerar_pontos_resiliência(rede,b,x):
     importância_máxima = encontrar_importância_total(rede)
     latência_efetiva_máxima = encontrar_latência_efetiva_média(rede)
@@ -50,17 +63,27 @@ def gerar_pontos_resiliência(rede,b,x):
     importâncias = np.zeros(x)
     latências_efetivas = np.zeros(x)
 
-    remover_nós_falha(rede, 0.3)
 
-    plt.figure(figsize=(16,16), dpi=256)
-    nx.draw(rede, with_labels=True, font_weight='bold')
-    plt.savefig("./Saída/grafo.png")
+    for n in range(b):
+        for i in range(x):
+            clone = cp.deepcopy(rede)
+            importância, latência_efetiva_média = simular_falha(clone, probabilidades[i])
+            importâncias[i] += importância
+            latências_efetivas[i] += latência_efetiva_média
 
-    componentes_conectadas = nx.connected_components(rede)
-    maior_cluster = max(componentes_conectadas, key=(lambda item: encontrar_importância_componente(item,rede)))
-    maior_cluster = rede.subgraph(maior_cluster).copy()
-    print(encontrar_importância_total(maior_cluster))
-    print(encontrar_latência_efetiva_média(maior_cluster))
+        print("Finalizando %d/%d" %(n+1, b))
+    
+    #Calcular Média
+    importâncias /= b
+    latências_efetivas /= b
+
+    #Normalizar
+    importâncias /= importância_máxima
+    latências_efetivas /= latência_efetiva_máxima
+
+    return importâncias, latências_efetivas, probabilidades
+
+
 
 
 

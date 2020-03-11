@@ -7,6 +7,8 @@ class Rede(ABC):
     def __init__(self):
         self._g = nx.Graph()
         self._wan_adicionada = False
+        self._análise_falha_aleatória = None
+        self._análise_falha_ataque = None
 
     def __adicionar_nó(self, nome, tipo):
         self._g.add_node(nome, importância = tipo["importância"], cor = tipo["cor"])
@@ -74,3 +76,25 @@ class Rede(ABC):
 
         nx.draw(self._g, with_labels=True, font_weight='bold', node_color=color_map)
         plt.savefig("./Saída/grafo.png")
+
+    def gerar_gráficos_resiliência(self):
+        plt.figure(figsize=(16,16), dpi=256)
+        plt.rcParams.update({'font.size': 22})
+        plt.suptitle("Análise de Resiliência (Importância e Latência Efetiva)")
+        plt.subplots_adjust(hspace=0.3)
+
+        plt.subplot(2,1,1)
+        plt.title("Importância x Probabilidade de Remoção")
+        plt.plot(self._análise_falha_aleatória.importâncias, self._análise_falha_aleatória.probabilidades, "ro")
+        plt.xlabel("Probabilidade de Remoção")
+        plt.ylabel("Importância (Normalizada)")
+        plt.grid(True, color="Gray")
+
+        plt.subplot(2,1,2)
+        plt.title("Latência Efetiva Média x Probabilidade de Remoção")
+        plt.plot(self._análise_falha_aleatória.importâncias, self._análise_falha_aleatória.probabilidades, "bo")
+        plt.xlabel("Probabilidade de Remoção")
+        plt.ylabel("Latência Efetiva Média (Normalizada)")
+        plt.grid(True, color="Gray")
+
+        plt.savefig("./Saída/resiliencia.png")

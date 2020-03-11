@@ -1,4 +1,5 @@
-import Rede, Analisador
+import Rede, Analisador, AnáliseResultadosDAO
+
 class Teste(Rede.Rede):
 
     def montar(self):
@@ -31,7 +32,4 @@ class Teste(Rede.Rede):
         self._adicionar_conexão(230, 1000, 11, "rot:principal", "wan")
 
     def analisar(self):
-        print(Analisador.encontrar_importância_total(self._g))
-        print(Analisador.encontrar_latência_efetiva_média(self._g))
-
-        Analisador.gerar_pontos_resiliência(self._g, 100,100)
+        self._análise_falha_aleatória = AnáliseResultadosDAO.AnáliseResultadosDAO(*Analisador.gerar_pontos_resiliência(self._g, 100,100))
