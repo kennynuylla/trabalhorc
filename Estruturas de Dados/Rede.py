@@ -65,7 +65,9 @@ class Rede(ABC):
             self.__adicionar_nó("usr:%s_%d" %(prefixo, i+1), Constantes.tipos["usuário"])
 
     def _adicionar_conexão(self, transmissão_média, transmissão_máxima, latência, início, fim):
-        self._g.add_edge(início,fim, transmissão_média = transmissão_média, transmissão_máxima=transmissão_máxima, latência=latência)
+        latência_efetiva = latência/(1 - transmissão_média/transmissão_máxima)
+        self._g.add_edge(início,fim, transmissão_média = transmissão_média, transmissão_máxima=transmissão_máxima, latência=latência, 
+            latência_efetiva = latência_efetiva)
 
     def desenhar(self):
         plt.figure(figsize=(16,16), dpi=256)

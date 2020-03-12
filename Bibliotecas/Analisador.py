@@ -18,21 +18,10 @@ def encontrar_importância_componente(componente,rede):
 
 def encontrar_latência_efetiva_média(rede):
     arestas = rede.edges(data=True)
-    d = 0
-
-    if(len(arestas) == 0):
-        return 0
-
-    for aresta in arestas:
-        latência = aresta[2]["latência"]
-        taxa_transmissão_média = aresta[2]["transmissão_média"]
-        taxa_transmissão_máxima = aresta[2]["transmissão_máxima"]
-        d += latência/(1 - taxa_transmissão_média/taxa_transmissão_máxima)
-
-    return d/len(arestas)
+    return nx.average_shortest_path_length(rede, weight="latência_efetiva")
 
 def remover_nós_falha(rede, probabilidade):
-    nós = rede.nodes()
+    nós = rede.edges()
     para_deletar = []
     for nó in nós:
         if(np.random.rand() < probabilidade):
@@ -40,7 +29,7 @@ def remover_nós_falha(rede, probabilidade):
 
         
 
-    rede.remove_nodes_from(para_deletar)
+    rede.remove_edges_from(para_deletar)
 
 def simular_falha(rede, probabilidade):
     remover_nós_falha(rede, probabilidade)
