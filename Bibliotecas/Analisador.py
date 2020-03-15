@@ -21,7 +21,7 @@ def encontrar_latência_efetiva_média(rede):
     return nx.average_shortest_path_length(rede, weight="latência_efetiva")
 
 def remover_nós_falha(rede, probabilidade):
-    nós = rede.edges()
+    nós = rede.nodes()
     para_deletar = []
     for nó in nós:
         if(np.random.rand() < probabilidade):
@@ -29,7 +29,7 @@ def remover_nós_falha(rede, probabilidade):
 
         
 
-    rede.remove_edges_from(para_deletar)
+    rede.remove_nodes_from(para_deletar)
 
 def simular_falha(rede, probabilidade):
     remover_nós_falha(rede, probabilidade)

@@ -20,7 +20,7 @@ class Aleatório(Rede.Rede):
             nó["cor"] = Constantes.tipos[chave]["cor"]
 
     def montar(self):
-        self._g = nx.fast_gnp_random_graph(1000, 0.3)
+        self._g = nx.fast_gnp_random_graph(10000, 0.8)
         nós = self._g.nodes(data=True)
         self._adicionar_tipo(nós[0], True)
 
@@ -41,4 +41,4 @@ class Aleatório(Rede.Rede):
             aresta[2]["transmissão_máxima"] = transmissão_máxima
 
     def analisar(self):
-        self._análise_falha_aleatória = AnáliseResultadosDAO.AnáliseResultadosDAO(*Analisador.gerar_pontos_resiliência(self._g, 10,100))
+        self._análise_falha_aleatória = AnáliseResultadosDAO.AnáliseResultadosDAO(*Analisador.gerar_pontos_resiliência(self._g, 1,100))
