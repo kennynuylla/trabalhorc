@@ -55,10 +55,12 @@ def gerar_pontos_resiliência(rede,b,x):
 
     for n in range(b):
         for i in range(x):
+            print("Começando probabilidade de remoção de %.2f (%d/%d)" %(probabilidades[i], i+1, x))
             clone = cp.deepcopy(rede)
             importância, latência_efetiva_média = simular_falha(clone, probabilidades[i])
             importâncias[i] += importância
             latências_efetivas[i] += latência_efetiva_média
+            print("Finalizado probabilidade de remoção de %.2f (%d/%d)" %(probabilidades[i], i+1, x))
 
         print("Finalizando %d/%d" %(n+1, b))
     
