@@ -44,10 +44,7 @@ def simular_falha(rede, probabilidade):
 
     return encontrar_importância_total(maior_cluster), encontrar_latência_efetiva_média(maior_cluster)
 
-def gerar_pontos_resiliência(rede,b,x):
-    importância_máxima = encontrar_importância_total(rede)
-    latência_efetiva_máxima = encontrar_latência_efetiva_média(rede)
-
+def gerar_pontos_resiliência(rede, importância_máxima, latência_efetiva_máxima, b,x):
     probabilidades = np.linspace(0,1,x)
     importâncias = np.zeros(x)
     latências_efetivas = np.zeros(x)

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-import networkx as nx, matplotlib.pyplot as plt, Constantes
+import networkx as nx, matplotlib.pyplot as plt, Constantes, pandas as pd
 
 from Exceptions import *
 
@@ -94,7 +94,7 @@ class Rede(ABC):
 
         plt.subplot(2,1,2)
         plt.title("Latência Efetiva Média x Probabilidade de Remoção")
-        plt.plot(self._análise_falha_aleatória.importâncias, self._análise_falha_aleatória.probabilidades, "bo")
+        plt.plot(self._análise_falha_aleatória.latências, self._análise_falha_aleatória.probabilidades, "bo")
         plt.xlabel("Probabilidade de Remoção")
         plt.ylabel("Latência Efetiva Média (Normalizada)")
         plt.grid(True, color="Gray")
