@@ -10,16 +10,12 @@ class Aleatório(Rede.Rede):
         total_importâncias = sum(Constantes.tipos[x]["importância"] for x in self.__tipos)
         self.__probabilidade_tipos = [Constantes.tipos[x]["importância"]/total_importâncias for x in self.__tipos] #142 é o somatório das importância sem wan
 
-        self.importância_nós = 0
-        self.latência_efetiva_média = 0
-
     def _adicionar_tipo(self, nó, wan = False):
         if wan:
             importância = Constantes.tipos["wan"]["importância"]
             nó["importância"] = importância
             nó["cor"] = Constantes.tipos["wan"]["cor"]
 
-            self.importância_nós += importância
         else:
             chave = np.random.choice(self.__tipos, p = self.__probabilidade_tipos)
             importância = Constantes.tipos[chave]["importância"]
@@ -27,10 +23,9 @@ class Aleatório(Rede.Rede):
             nó["importância"] = importância
             nó["cor"] = Constantes.tipos[chave]["cor"]
 
-            self.importância_nós += importância
 
     def montar(self):
-        self._g = nx.fast_gnp_random_graph(1000, 0.8)
+        self._g = nx.fast_gnp_random_graph(100, 0.8)
         nós = self._g.nodes(data=True)
         self._adicionar_tipo(nós[0], True)
 
@@ -50,10 +45,7 @@ class Aleatório(Rede.Rede):
             aresta[2]["transmissão_média"] = transmissão
             aresta[2]["transmissão_máxima"] = transmissão_máxima
 
-            self.latência_efetiva_média += latência_efetiva
-        
-        self.latência_efetiva_média /= len(self._g.edges())
+        self.latência_efetiva_média = nx.average_shortest_path_length(self._g, weight="latência_efetiva")
 
     def analisar(self):
-        self._análise_falha_aleatória = AnáliseResultadosDAO.AnáliseResultadosDAO(*Analisador.gerar_pontos_resiliência(self._g, self.importância_nós, self.latência_efetiva_média, 
-            10,100))
+        self._análise_falha_aleatória = AnáliseResultadosDAO.AnáliseResultadosDAO(*Analisador.gerar_pontos_resiliência(self._g, 1,100))

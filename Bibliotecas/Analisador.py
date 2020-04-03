@@ -5,7 +5,7 @@ def encontrar_importância_total(rede):
     nós = rede.nodes(data=True)
     k = 0
     for nó in nós:
-        k += nó[1]["importância"]
+        k += nó[1]["importância"] + rede.degree[nó[0]]
 
     return k
 
@@ -13,11 +13,10 @@ def encontrar_importância_componente(componente,rede):
     k = 0
     nós_rede = rede.nodes(data=True)
     for nó in componente:
-        k += nós_rede[nó]["importância"]
+        k += nós_rede[nó]["importância"] + rede.degree[nó]
     return k
 
 def encontrar_latência_efetiva_média(rede):
-    arestas = rede.edges(data=True)
     return nx.average_shortest_path_length(rede, weight="latência_efetiva")
 
 def remover_nós_falha(rede, probabilidade):
@@ -44,7 +43,7 @@ def simular_falha(rede, probabilidade):
 
     return encontrar_importância_total(maior_cluster), encontrar_latência_efetiva_média(maior_cluster)
 
-def gerar_pontos_resiliência(rede, importância_máxima, latência_efetiva_máxima, b,x):
+def gerar_pontos_resiliência(rede, b,x):
     probabilidades = np.linspace(0,1,x)
     importâncias = np.zeros(x)
     latências_efetivas = np.zeros(x)
@@ -66,8 +65,8 @@ def gerar_pontos_resiliência(rede, importância_máxima, latência_efetiva_máx
     latências_efetivas /= b
 
     #Normalizar
-    importâncias /= importância_máxima
-    latências_efetivas /= latência_efetiva_máxima
+    importâncias /= importâncias[0]
+    latências_efetivas /= latências_efetivas[0]
 
     return importâncias, latências_efetivas, probabilidades
 

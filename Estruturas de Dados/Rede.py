@@ -87,14 +87,16 @@ class Rede(ABC):
 
         plt.subplot(2,1,1)
         plt.title("Importância x Probabilidade de Remoção")
-        plt.plot(self._análise_falha_aleatória.importâncias, self._análise_falha_aleatória.probabilidades, "ro")
+        #plt.plot(self._análise_falha_aleatória.importâncias, self._análise_falha_aleatória.probabilidades, "ro")
+        plt.plot(self._análise_falha_aleatória.probabilidades, self._análise_falha_aleatória.importâncias, "ro")
         plt.xlabel("Probabilidade de Remoção")
         plt.ylabel("Importância (Normalizada)")
         plt.grid(True, color="Gray")
 
         plt.subplot(2,1,2)
         plt.title("Latência Efetiva Média x Probabilidade de Remoção")
-        plt.plot(self._análise_falha_aleatória.latências, self._análise_falha_aleatória.probabilidades, "bo")
+        #plt.plot(self._análise_falha_aleatória.latências, self._análise_falha_aleatória.probabilidades, "bo")
+        plt.plot(self._análise_falha_aleatória.probabilidades, self._análise_falha_aleatória.latências, "bo")
         plt.xlabel("Probabilidade de Remoção")
         plt.ylabel("Latência Efetiva Média (Normalizada)")
         plt.grid(True, color="Gray")
