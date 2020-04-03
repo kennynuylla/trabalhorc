@@ -24,8 +24,8 @@ class Aleatório(Rede.Rede):
             nó["cor"] = Constantes.tipos[chave]["cor"]
 
 
-    def montar(self):
-        self._g = nx.fast_gnp_random_graph(100, 0.8)
+    def montar(self, quanidade_nós):
+        self._g = nx.fast_gnp_random_graph(quanidade_nós, 0.8)
         nós = self._g.nodes(data=True)
         self._adicionar_tipo(nós[0], True)
 
@@ -47,5 +47,6 @@ class Aleatório(Rede.Rede):
 
         self.latência_efetiva_média = nx.average_shortest_path_length(self._g, weight="latência_efetiva")
 
-    def analisar(self):
-        self._análise_falha_aleatória = AnáliseResultadosDAO.AnáliseResultadosDAO(*Analisador.gerar_pontos_resiliência(self._g, 1,100))
+    def analisar(self, quantidade_repetições, quantidade_probabilidades):
+        self._análise_falha_aleatória = AnáliseResultadosDAO.AnáliseResultadosDAO(*Analisador.gerar_pontos_resiliência(self._g, quantidade_repetições,
+            quantidade_probabilidades))
