@@ -6,6 +6,7 @@ namespace Analise.Constantes
         public string ArquivoCriar { get => "criar.py"; }
         public string DiretórioTmp { get => "tmp/"; }
         public string BaseNomeListaArestas { get => "rede_arestas"; }
+        public string BaseNomeListaNós {get => "rede_nós"; }
         public string Extensão { get => ".txt"; }
     }
 }
