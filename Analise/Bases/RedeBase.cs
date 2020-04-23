@@ -10,13 +10,16 @@ namespace Analise.Bases
     {
         private readonly RedeBaseConstantes _constantes = new RedeBaseConstantes();
         private readonly string _caminhoPython;
-        private readonly string _listaArestas;
+        private string _listaNós;
+        private string _listaArestas;
 
         protected readonly Pysharp _pysharp;
         protected readonly string _caminhoRede;
 
         public string DiretórioTmp { get => $"{_caminhoPython}{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.DiretórioTmp}";}
         public string ListaArestas { get => $"{DiretórioTmp}{_listaArestas}"; }
+        public string ListaNós { get => $"{DiretórioTmp}{_listaNós}"; }
+
         public string ScriptCriarRelativo { get => $"{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.ArquivoCriar}"; }
 
 
@@ -27,14 +30,15 @@ namespace Analise.Bases
             _caminhoPython = caminhoPython;
 
             CriarDiretórioTemporário();
-            _listaArestas = CriarArquivoListaArestas();
-            
+            CriarArquivoListaArestas();
+            CriarArquivoListaNós();
         }
-
 
         public virtual void CriarRede()
         {
             _pysharp.AdicionarArgumento(ListaArestas);
+            _pysharp.AdicionarArgumento(ListaNós);
+
             var resposta = _pysharp.Executar(ScriptCriarRelativo);
 
             if(resposta.AlgoErrado) 
@@ -46,6 +50,7 @@ namespace Analise.Bases
         public void Dispose()
         {
             File.Delete(ListaArestas);
+            File.Delete(ListaNós);
         }
 
         private void CriarDiretórioTemporário()
@@ -56,22 +61,28 @@ namespace Analise.Bases
             }
         }
 
-        private string CriarArquivoListaArestas()
+        private void CriarArquivoListaArestas()
         {
-            string retorno;
+            _listaArestas = $"{ObterNomeArquivo(_constantes.BaseNomeListaArestas)}{_constantes.Extensão}";
+            File.Create(ListaArestas);
 
-            var tmpListaArestas = _constantes.BaseNomeListaArestas;
+        }
+
+        private string ObterNomeArquivo(string baseNome)
+        {
             var aleatório = new Random();
-
-            while (File.Exists($"{DiretórioTmp}{tmpListaArestas}{_constantes.Extensão}"))
+            while(File.Exists($"{DiretórioTmp}{baseNome}{_constantes.Extensão}"))
             {
-                tmpListaArestas = $"{tmpListaArestas}{aleatório.Next(10)}";
+                baseNome = $"{baseNome}{aleatório.Next(10)}";
             }
 
-            retorno = $"{tmpListaArestas}{_constantes.Extensão}";
-            File.Create(retorno);
+            return baseNome;
+        }
 
-            return retorno;
+        private void CriarArquivoListaNós()
+        {
+            _listaNós = $"{ObterNomeArquivo(_constantes.BaseNomeListaNós)}{_constantes.Extensão}";
+            File.Create(ListaNós);
         }
     }
 }
