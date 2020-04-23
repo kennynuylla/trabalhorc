@@ -1,0 +1,9 @@
+version: "3"
+services:
+    pysharp:
+        image: pysharp.dev
+        container_name: Trabalho.RC
+        volumes:
+            - C:\\Users\\mathe\\Desktop\\Git\\trabalhorc:/codigo
+            - C:\\Users\\mathe\\Desktop\\Git\\pysharp\\PySharp\\classe:/dlls/pysharp:ro
+        command: tail -f /dev/null
