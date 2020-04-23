@@ -1,7 +1,7 @@
 import sys, networkx as nx, random as rnd
 sys.path.append("/codigo/py/Comum")
 
-import nodelist as ndlist
+import netlist
 
 rede = nx.fast_gnp_random_graph(5, 0.8)
 
@@ -14,5 +14,5 @@ for nó in nós:
 for aresta in arestas:
     aresta[2]["latência_efetiva"] = rnd.random()
 
-nx.write_edgelist(rede, "%s" %(sys.argv[1]), data=True)
-ndlist.gerarNodeList(sys.argv[2], rede)
+netlist.GerarEdgeList(sys.argv[1], rede)
+netlist.GerarNodeList(sys.argv[2], rede)

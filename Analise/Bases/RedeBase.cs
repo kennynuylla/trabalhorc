@@ -21,6 +21,7 @@ namespace Analise.Bases
         public string ListaNós { get => $"{DiretórioTmp}{_listaNós}"; }
 
         public string ScriptCriarRelativo { get => $"{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.ArquivoCriar}"; }
+        public string ScriptPlotarRelativo { get => $"{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.ArquivoPlotar}"; }
 
 
         public RedeBase(string caminhoPython, string caminhoRede, string executávelPython)
@@ -36,12 +37,30 @@ namespace Analise.Bases
 
         public virtual void CriarRede()
         {
+            _pysharp.LimparArgumentos();
+
             _pysharp.AdicionarArgumento(ListaArestas);
             _pysharp.AdicionarArgumento(ListaNós);
 
             var resposta = _pysharp.Executar(ScriptCriarRelativo);
 
             if(resposta.AlgoErrado) 
+            {
+                //Lançar Exceção
+            }
+        }
+
+        public void PlotarRede(string arquivo)
+        {
+            _pysharp.LimparArgumentos();
+
+            _pysharp.AdicionarArgumento(ListaNós);
+            _pysharp.AdicionarArgumento(ListaArestas);
+            _pysharp.AdicionarArgumento(arquivo);
+
+            var resposta = _pysharp.Executar(ScriptPlotarRelativo);
+
+            if(resposta.AlgoErrado)
             {
                 //Lançar Exceção
             }
