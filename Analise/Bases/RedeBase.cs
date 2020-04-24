@@ -10,6 +10,9 @@ namespace Analise.Bases
     {
         private readonly RedeBaseConstantes _constantes = new RedeBaseConstantes();
         private readonly string _caminhoPython;
+
+        private int _importânciaTotal;
+        private double _latênciaEfetivaMédia;
         private string _listaNós;
         private string _listaArestas;
 
@@ -47,6 +50,12 @@ namespace Analise.Bases
             if(resposta.AlgoErrado) 
             {
                 //Lançar Exceção
+            }
+            else
+            {
+                var dadosRede = resposta.MensagensTela.Split('|', 2, StringSplitOptions.RemoveEmptyEntries);
+                _importânciaTotal = Int32.Parse(dadosRede[0]);
+                _latênciaEfetivaMédia = Double.Parse(dadosRede[1]);
             }
         }
 
