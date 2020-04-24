@@ -1,5 +1,6 @@
 ﻿using System;
-using PySharp;
+using Analise.Interfaces;
+using Analise.Redes;
 
 namespace Analise
 {
@@ -7,7 +8,11 @@ namespace Analise
     {
         static void Main(string[] args)
         {
-            var pysharp = new Pysharp("/codigo/py", "python3");
+            using(IRede rede = new DebugRede())
+            {
+                rede.CriarRede();
+                //rede.PlotarRede("/codigo/png/plot.png");
+            }
         }
     }
 }
