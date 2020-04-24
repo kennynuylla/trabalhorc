@@ -46,17 +46,10 @@ namespace Analise.Bases
             _pysharp.AdicionarArgumento(ListaNós);
 
             var resposta = _pysharp.Executar(ScriptCriarRelativo);
-
-            if(resposta.AlgoErrado) 
-            {
-                //Lançar Exceção
-            }
-            else
-            {
-                var dadosRede = resposta.MensagensTela.Split('|', 2, StringSplitOptions.RemoveEmptyEntries);
-                _importânciaTotal = Int32.Parse(dadosRede[0]);
-                _latênciaEfetivaMédia = Double.Parse(dadosRede[1]);
-            }
+            var dadosRede = resposta.MensagensTela.Split('|', 2, StringSplitOptions.RemoveEmptyEntries);
+            _importânciaTotal = Int32.Parse(dadosRede[0]);
+            _latênciaEfetivaMédia = Double.Parse(dadosRede[1]);
+        
         }
 
         public void PlotarRede(string arquivo)
@@ -68,11 +61,6 @@ namespace Analise.Bases
             _pysharp.AdicionarArgumento(arquivo);
 
             var resposta = _pysharp.Executar(ScriptPlotarRelativo);
-
-            if(resposta.AlgoErrado)
-            {
-                //Lançar Exceção
-            }
         }
 
         public void Dispose()
