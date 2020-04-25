@@ -10,32 +10,26 @@ namespace Analise.Bases
     public abstract class RedeBase : IRede
     {
         protected readonly RedeBaseConstantes _constantes = new RedeBaseConstantes();
-        private readonly string _caminhoPython;
-        private readonly string _executávelPython;
-        private readonly string _caminhoRede;
+        private string _caminhoPython;
+        private string _executávelPython;
+        private string _caminhoRede;
 
         protected int _importânciaTotal;
         protected double _latênciaEfetivaMédia;
         protected string _listaNós;
         protected string _listaArestas;
-
-        protected readonly Pysharp _pysharp;
+        protected Pysharp _pysharp;
 
         public string DiretórioTmp { get => $"{_caminhoPython}{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.DiretórioTmp}";}
         public string ListaArestas { get => $"{DiretórioTmp}{_listaArestas}"; }
         public string ListaNós { get => $"{DiretórioTmp}{_listaNós}"; }
-
         public string ScriptCriarRelativo { get => $"{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.ArquivoCriar}"; }
         public string ScriptPlotarRelativo { get => $"{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.ArquivoPlotar}"; }
 
         public RedeBase(string caminhoPython, string caminhoRede, string executávelPython)
         {
-            _pysharp = new Pysharp(caminhoPython, executávelPython);
-            _caminhoRede = caminhoRede;
-            _caminhoPython = caminhoPython;
-            _executávelPython = executávelPython;
-
-            CriarDiretórioTemporário();
+            InicializarPython(caminhoPython, caminhoRede, executávelPython);
+            CriarDiretório(DiretórioTmp);
             CriarArquivoListaArestas();
             CriarArquivoListaNós();
         }
@@ -43,10 +37,7 @@ namespace Analise.Bases
         public RedeBase(string caminhoPython, string caminhoRede, string executávelPython, string listaArestas, string listaNós,
             int importânciaTotal, double latênciaEfetiva)
         {
-            _pysharp = new Pysharp(caminhoPython, executávelPython);
-            _caminhoPython = caminhoPython;
-            _caminhoRede = caminhoRede;
-            _executávelPython = executávelPython;
+            InicializarPython(caminhoPython, caminhoRede, executávelPython);    
             _listaArestas = listaArestas;
             _listaNós = listaNós;
             _importânciaTotal = importânciaTotal;
@@ -69,11 +60,7 @@ namespace Analise.Bases
 
         public void PlotarRede(string arquivo)
         {
-
-            if(!Directory.Exists(_constantes.PastaPlots))
-            {
-                Directory.CreateDirectory(_constantes.PastaPlots);
-            }
+            CriarDiretório(_constantes.PastaPlots);
 
             _pysharp.LimparArgumentos();
 
@@ -92,19 +79,25 @@ namespace Analise.Bases
 
         public abstract object Clone();
 
-        private void CriarDiretórioTemporário()
+        private void CriarDiretório(string diretório)
         {
-            if (!Directory.Exists(DiretórioTmp))
+            if (!Directory.Exists(diretório))
             {
-                Directory.CreateDirectory(DiretórioTmp);
+                Directory.CreateDirectory(diretório);
             }
         }
 
         private void CriarArquivoListaArestas()
         {
             _listaArestas = $"{ObterNomeArquivo(_constantes.BaseNomeListaArestas)}{_constantes.Extensão}";
-            File.Create(ListaArestas).Close(); //A função Create abre o arquivo criado;
+            CriarArquivo(ListaArestas);
 
+        }
+
+        private void CriarArquivoListaNós()
+        {
+            _listaNós = $"{ObterNomeArquivo(_constantes.BaseNomeListaNós)}{_constantes.Extensão}";
+            CriarArquivo(ListaNós);
         }
 
         private string ObterNomeArquivo(string baseNome)
@@ -118,10 +111,17 @@ namespace Analise.Bases
             return baseNome;
         }
 
-        private void CriarArquivoListaNós()
+        private void InicializarPython(string caminhoPython, string caminhoRede, string executávelPython)
         {
-            _listaNós = $"{ObterNomeArquivo(_constantes.BaseNomeListaNós)}{_constantes.Extensão}";
-            File.Create(ListaNós).Close();
+            _pysharp = new Pysharp(caminhoPython, executávelPython);
+            _caminhoRede = caminhoRede;
+            _caminhoPython = caminhoPython;
+            _executávelPython = executávelPython;
+        }
+
+        private void CriarArquivo(string arquivo)
+        {
+            File.Create(arquivo).Close(); //A função Create abre o arquivo criado
         }
 
         protected PréCloneDAO PréClone()
@@ -134,6 +134,5 @@ namespace Analise.Bases
 
             return new PréCloneDAO(listaArestasClone, listaNósClone);
         }
-
     }
 }
