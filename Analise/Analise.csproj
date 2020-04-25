@@ -6,9 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-  <Reference Include="PySharp">
-    <HintPath>/dlls/pysharp/PySharp.dll</HintPath>
-  </Reference>
-</ItemGroup>
+    <ProjectReference Include="..\..\projetos\pysharp\PySharp.csproj" />
+  </ItemGroup>
 
 </Project>
