@@ -11,7 +11,11 @@ namespace Analise
             using(IRede rede = new DebugRede())
             {
                 rede.CriarRede();
-                //rede.PlotarRede("/codigo/png/plot.png");
+                using(IRede clone = rede.Clone() as DebugRede)
+                {
+                    rede.PlotarRede("/codigo/png/original.png");
+                    clone.PlotarRede("/codigo/png/clone.png");
+                }
             }
         }
     }
