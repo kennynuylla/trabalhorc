@@ -20,11 +20,11 @@ namespace Analise.Bases
         protected string _listaArestas;
         protected Pysharp _pysharp;
 
-        public string DiretórioTmp { get => $"{_caminhoPython}{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.DiretórioTmp}";}
+        public string DiretórioTmp { get => $"{_caminhoPython}{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.PastaTemporária}";}
         public string ListaArestas { get => $"{DiretórioTmp}{_listaArestas}"; }
         public string ListaNós { get => $"{DiretórioTmp}{_listaNós}"; }
         public string ScriptCriarRelativo { get => $"{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.ArquivoCriar}"; }
-        public string ScriptPlotarRelativo { get => $"{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.ArquivoPlotar}"; }
+        public string ScriptPlotarRelativo { get => $"{_constantes.PastaScriptsComuns}{_constantes.ArquivoPlotar}"; }
 
         public RedeBase(string caminhoPython, string caminhoRede, string executávelPython)
         {
