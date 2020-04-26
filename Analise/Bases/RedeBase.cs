@@ -4,6 +4,7 @@ using Analise.Constantes;
 using Analise.DAO;
 using Analise.Interfaces;
 using PySharp;
+using PySharp.DAO;
 
 namespace Analise.Bases
 {
@@ -25,6 +26,7 @@ namespace Analise.Bases
         public string ListaNós { get => $"{DiretórioTmp}{_listaNós}"; }
         public string ScriptCriarRelativo { get => $"{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.ArquivoCriar}"; }
         public string ScriptPlotarRelativo { get => $"{_constantes.PastaScriptsComuns}{_constantes.ArquivoPlotar}"; }
+        public string ScriptReanalisarRelativo { get => $"{_constantes.PastaScriptsComuns}{_constantes.ArquivoReanalisar}"; }
 
         public RedeBase(string caminhoPython, string caminhoRede, string executávelPython)
         {
@@ -46,26 +48,18 @@ namespace Analise.Bases
 
         public virtual void CriarRede()
         {
-            _pysharp.LimparArgumentos();
-
-            _pysharp.AdicionarArgumento(ListaArestas);
-            _pysharp.AdicionarArgumento(ListaNós);
+            InserirArgumentosPadrão();
 
             var resposta = _pysharp.Executar(ScriptCriarRelativo);
-            var dadosRede = resposta.MensagensTela.Split('|', 2, StringSplitOptions.RemoveEmptyEntries);
-            _importânciaTotal = Int32.Parse(dadosRede[0]);
-            _latênciaEfetivaMédia = Double.Parse(dadosRede[1]);
-        
+            ExtrairAnálise(resposta);
+
         }
 
         public void PlotarRede(string arquivo)
         {
             CriarDiretório(_constantes.PastaPlots);
+            InserirArgumentosPadrão();
 
-            _pysharp.LimparArgumentos();
-
-            _pysharp.AdicionarArgumento(ListaNós);
-            _pysharp.AdicionarArgumento(ListaArestas);
             _pysharp.AdicionarArgumento(arquivo);
 
             var resposta = _pysharp.Executar(ScriptPlotarRelativo);
@@ -83,6 +77,14 @@ namespace Analise.Bases
         }
 
         public abstract object Clone();
+
+        public void Reanalisar()
+        {
+            InserirArgumentosPadrão();
+
+            var resposta = _pysharp.Executar(ScriptReanalisarRelativo);
+            ExtrairAnálise(resposta);
+        }
 
         private void CriarDiretório(string diretório)
         {
@@ -127,6 +129,20 @@ namespace Analise.Bases
         private void CriarArquivo(string arquivo)
         {
             File.Create(arquivo).Close(); //A função Create abre o arquivo criado
+        }
+
+        private void ExtrairAnálise(ProcessoDAO resposta)
+        {
+            var dadosRede = resposta.MensagensTela.Split('|', 2, StringSplitOptions.RemoveEmptyEntries);
+            _importânciaTotal = Int32.Parse(dadosRede[0]);
+            _latênciaEfetivaMédia = Double.Parse(dadosRede[1]);
+        }
+
+        private void InserirArgumentosPadrão()
+        {
+            _pysharp.LimparArgumentos();
+            _pysharp.AdicionarArgumento(ListaNós);
+            _pysharp.AdicionarArgumento(ListaArestas);
         }
 
         protected ListasArquivosDAO PréClone()

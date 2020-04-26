@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Analise.Bibliotecas;
 using Analise.Interfaces;
 using Analise.Redes;
@@ -9,17 +10,47 @@ namespace Analise
     {
         static void Main(string[] args)
         {
+            // TestarPlotEImportância();
+            // TestarClone();
+            TestarAnálise();
+        }
+
+        public static void TestarPlotEImportância()
+        {
+            var png = "/codigo/png/original.png";
             using(IRede rede = new DebugRede())
             {
                 rede.CriarRede();
-/*                IRede clone = rede.Clone() as DebugRede;
-                rede.PlotarRede("/codigo/png/original.png");
-                clone.PlotarRede("/codigo/png/clone.png");
-                Console.WriteLine("Rede Criada");
-*/
-                IAnalisador analisador = new AnalisadorBiblioteca();
+                rede.PlotarRede(png);
+            } //Verificar se plot está certo e se a importância total também
+            File.Delete(png);
+        }
+
+        public static void TestarClone()
+        {
+            var pngOriginal = "/codigo/png/original.png";
+            var pngClone = "/codigo/png/clone.png";
+            using(IRede rede = new DebugRede())
+            {
+                rede.CriarRede();
+                using(IRede clone = rede.Clone() as DebugRede)
+                {
+                    rede.PlotarRede(pngOriginal);
+                    clone.PlotarRede(pngClone);
+                }
+            }
+
+            File.Delete(pngClone);
+            File.Delete(pngOriginal);
+        }
+
+        public static void TestarAnálise()
+        {
+            using(IRede rede = new DebugRede())
+            using(IAnalisador analisador = new AnalisadorBiblioteca())
+            {
+                rede.CriarRede();
                 analisador.AnalisarRede(rede);
-                Console.WriteLine("Rede Analisada");
             }
         }
     }
