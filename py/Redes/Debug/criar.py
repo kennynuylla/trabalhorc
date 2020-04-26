@@ -2,7 +2,7 @@ import sys, networkx as nx, random as rnd
 sys.path.append("/codigo/py/Comum")
 from Bibliotecas import *
 
-rede = nx.fast_gnp_random_graph(7, 0.8)
+rede = nx.fast_gnp_random_graph(1000, 0.8)
 
 nós = rede.nodes(data=True)
 arestas = rede.edges(data=True)
