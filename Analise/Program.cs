@@ -49,7 +49,8 @@ namespace Analise
             using(IRede rede = new DebugRede())
             {
                 rede.CriarRede();
-                IAnalisador analisador = new AnalisadorBiblioteca();
+                Console.WriteLine("Rede Criada");
+                IAnalisador analisador = new AnalisadorEmMemória();
                 var dados = analisador.AnalisarRede(rede);
 
                 using(var resultado = new CSVResultado("analise.csv", ';', dados))

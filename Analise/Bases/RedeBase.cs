@@ -27,6 +27,7 @@ namespace Analise.Bases
         public string ScriptCriarRelativo { get => $"{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.ArquivoCriar}"; }
         public string ScriptPlotarRelativo { get => $"{_constantes.PastaScriptsComuns}{_constantes.ArquivoPlotar}"; }
         public string ScriptReanalisarRelativo { get => $"{_constantes.PastaScriptsComuns}{_constantes.ArquivoReanalisar}"; }
+        public string ScriptEmMemória { get => $"{_constantes.PastaScriptsComuns}{_constantes.ArquivoEmMemória}"; }
 
         public RedeBase(string caminhoPython, string caminhoRede, string executávelPython)
         {
@@ -156,6 +157,17 @@ namespace Analise.Bases
             File.Copy(ListaNós, $"{DiretórioTmp}{listaNósClone}");
 
             return new ListaArquivosDAO(listaArestasClone, listaNósClone);
+        }
+
+        public MétricasRedeDAO AnalisarEmMemória(double probabilidadeRemoção)
+        {
+            InserirArgumentosPadrão();
+            _pysharp.AdicionarArgumento(probabilidadeRemoção.ToString());
+
+            var resposta = _pysharp.Executar(ScriptEmMemória);
+            ExtrairAnálise(resposta);
+            
+            return RetornarMétricasRede();
         }
     }
 }

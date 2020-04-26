@@ -10,5 +10,6 @@ namespace Analise.Interfaces
         void Reanalisar();
         ListaArquivosDAO RetornarArquivosRede();
         MétricasRedeDAO RetornarMétricasRede();
+        MétricasRedeDAO AnalisarEmMemória(double probabilidadeRemoção);
     }
 }
