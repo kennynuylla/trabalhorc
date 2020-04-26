@@ -1,4 +1,9 @@
-import sys, netlist, netplot
+import sys
+from Bibliotecas import *
 
-rede = netlist.LerRede(sys.argv[1], sys.argv[2])
-netplot.PlotarRede(rede, sys.argv[3])
+listaNós = sys.argv[1]
+listaArestas = sys.argv[2]
+caminhoArquivo = sys.argv[3]
+
+rede = netlist.LerRede(listaNós, listaArestas)
+netplot.PlotarRede(rede, caminhoArquivo)

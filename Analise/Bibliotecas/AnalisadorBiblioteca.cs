@@ -19,10 +19,13 @@ namespace Analise.Bibliotecas
 
            for (int i = 0; i < _quantidadePontos; i++)
            {
+               var probabilidade = probabilidadesRemoção[i];
                using(IRede clone = rede.Clone() as IRede)
                {
-                   var probabilidade = probabilidadesRemoção[i];
                    RemoverNós(clone, probabilidade);
+                   clone.PlotarRede("/codigo/png/clone.png");
+                   rede.PlotarRede("/codigo/png/original.png");
+                   //clone.Reanalisar();
                }
                Console.WriteLine($"Analisado {i+1} de {_quantidadePontos}");
            }

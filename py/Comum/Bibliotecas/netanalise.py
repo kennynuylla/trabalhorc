@@ -5,7 +5,7 @@ def Analisar(rede):
     importância_total = 0
 
     for nó in list(rede.nodes(data=True)):
-        importância_total += nó[1]["importância_final"]
+        importância_total += nó[1]["importância"] + rede.degree(nó[0])
 
     return importância_total, latência_efetiva_média
     
