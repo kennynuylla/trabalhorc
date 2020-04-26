@@ -3,7 +3,7 @@ using Analise.DAO;
 
 namespace Analise.Interfaces
 {
-    public interface IAnalisador : IDisposable
+    public interface IAnalisador
     {
         AnáliseDAO AnalisarRede(IRede rede);
     }

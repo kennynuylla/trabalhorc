@@ -47,10 +47,15 @@ namespace Analise
         public static void TestarAnálise()
         {
             using(IRede rede = new DebugRede())
-            using(IAnalisador analisador = new AnalisadorBiblioteca())
             {
                 rede.CriarRede();
-                analisador.AnalisarRede(rede);
+                IAnalisador analisador = new AnalisadorBiblioteca();
+                var dados = analisador.AnalisarRede(rede);
+
+                using(var resultado = new CSVResultado("analise.csv", ';', dados))
+                {
+                    resultado.Escrever();
+                }
             }
         }
     }

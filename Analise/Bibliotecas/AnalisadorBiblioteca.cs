@@ -24,16 +24,14 @@ namespace Analise.Bibliotecas
                {
                    RemoverNós(clone, probabilidade);
                    clone.Reanalisar();
+                   var dados = clone.RetornarMétricasRede();
+                   importânciaTotal[i] = dados.Importância;
+                   latênciaEfetiva[i] = dados.Latência;
                }
                Console.WriteLine($"Analisado {i+1} de {_quantidadePontos}");
            }
 
-           return new AnáliseDAO(importânciaTotal, latênciaEfetiva, probabilidadesRemoção);
-        }
-
-        public void Dispose()
-        {
-            throw new System.NotImplementedException();
+           return new AnáliseDAO(importânciaTotal, latênciaEfetiva, probabilidadesRemoção, _quantidadePontos);
         }
 
         private double [] Linspace (double início, double fim, int quantidade)

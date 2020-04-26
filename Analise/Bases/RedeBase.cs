@@ -71,9 +71,9 @@ namespace Analise.Bases
             File.Delete(ListaNós);
         }
 
-        public ListasArquivosDAO RetornarArquivosRede()
+        public ListaArquivosDAO RetornarArquivosRede()
         {
-            return new ListasArquivosDAO(ListaArestas, ListaNós);
+            return new ListaArquivosDAO(ListaArestas, ListaNós);
         }
 
         public abstract object Clone();
@@ -85,6 +85,8 @@ namespace Analise.Bases
             var resposta = _pysharp.Executar(ScriptReanalisarRelativo);
             ExtrairAnálise(resposta);
         }
+
+        public MétricasRedeDAO RetornarMétricasRede() => new MétricasRedeDAO(_importânciaTotal, _latênciaEfetivaMédia);
 
         private void CriarDiretório(string diretório)
         {
@@ -145,7 +147,7 @@ namespace Analise.Bases
             _pysharp.AdicionarArgumento(ListaArestas);
         }
 
-        protected ListasArquivosDAO PréClone()
+        protected ListaArquivosDAO PréClone()
         {
             var listaArestasClone = $"{ObterNomeArquivo(_constantes.BaseNomeListaArestas)}{_constantes.Extensão}";
             var listaNósClone = $"{ObterNomeArquivo(_constantes.BaseNomeListaNós)}{_constantes.Extensão}";
@@ -153,7 +155,7 @@ namespace Analise.Bases
             File.Copy(ListaArestas, $"{DiretórioTmp}{listaArestasClone}");
             File.Copy(ListaNós, $"{DiretórioTmp}{listaNósClone}");
 
-            return new ListasArquivosDAO(listaArestasClone, listaNósClone);
+            return new ListaArquivosDAO(listaArestasClone, listaNósClone);
         }
     }
 }

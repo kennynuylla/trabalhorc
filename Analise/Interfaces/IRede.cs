@@ -8,6 +8,7 @@ namespace Analise.Interfaces
         void CriarRede();
         void PlotarRede(string arquivo);
         void Reanalisar();
-        ListasArquivosDAO RetornarArquivosRede();
+        ListaArquivosDAO RetornarArquivosRede();
+        MétricasRedeDAO RetornarMétricasRede();
     }
 }
