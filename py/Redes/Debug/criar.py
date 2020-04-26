@@ -3,7 +3,7 @@ sys.path.append("/codigo/py/Comum")
 
 import netlist, netanalise
 
-rede = nx.fast_gnp_random_graph(5, 0.8)
+rede = nx.fast_gnp_random_graph(1000, 0.8)
 
 nós = rede.nodes(data=True)
 arestas = rede.edges(data=True)
