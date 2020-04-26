@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Analise.Constantes;
+using Analise.DAO;
 using Analise.Interfaces;
 using PySharp;
 
@@ -8,34 +9,39 @@ namespace Analise.Bases
 {
     public abstract class RedeBase : IRede
     {
-        private readonly RedeBaseConstantes _constantes = new RedeBaseConstantes();
-        private readonly string _caminhoPython;
+        protected readonly RedeBaseConstantes _constantes = new RedeBaseConstantes();
+        private string _caminhoPython;
+        private string _executávelPython;
+        private string _caminhoRede;
 
-        private int _importânciaTotal;
-        private double _latênciaEfetivaMédia;
-        private string _listaNós;
-        private string _listaArestas;
+        protected int _importânciaTotal;
+        protected double _latênciaEfetivaMédia;
+        protected string _listaNós;
+        protected string _listaArestas;
+        protected Pysharp _pysharp;
 
-        protected readonly Pysharp _pysharp;
-        protected readonly string _caminhoRede;
-
-        public string DiretórioTmp { get => $"{_caminhoPython}{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.DiretórioTmp}";}
+        public string DiretórioTmp { get => $"{_caminhoPython}{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.PastaTemporária}";}
         public string ListaArestas { get => $"{DiretórioTmp}{_listaArestas}"; }
         public string ListaNós { get => $"{DiretórioTmp}{_listaNós}"; }
-
         public string ScriptCriarRelativo { get => $"{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.ArquivoCriar}"; }
-        public string ScriptPlotarRelativo { get => $"{_constantes.PastaTodasRedes}{_caminhoRede}{_constantes.ArquivoPlotar}"; }
-
+        public string ScriptPlotarRelativo { get => $"{_constantes.PastaScriptsComuns}{_constantes.ArquivoPlotar}"; }
 
         public RedeBase(string caminhoPython, string caminhoRede, string executávelPython)
         {
-            _pysharp = new Pysharp(caminhoPython, executávelPython);
-            _caminhoRede = caminhoRede;
-            _caminhoPython = caminhoPython;
-
-            CriarDiretórioTemporário();
+            InicializarPython(caminhoPython, caminhoRede, executávelPython);
+            CriarDiretório(DiretórioTmp);
             CriarArquivoListaArestas();
             CriarArquivoListaNós();
+        }
+
+        public RedeBase(string caminhoPython, string caminhoRede, string executávelPython, string listaArestas, string listaNós,
+            int importânciaTotal, double latênciaEfetiva)
+        {
+            InicializarPython(caminhoPython, caminhoRede, executávelPython);    
+            _listaArestas = listaArestas;
+            _listaNós = listaNós;
+            _importânciaTotal = importânciaTotal;
+            _latênciaEfetivaMédia = latênciaEfetiva;
         }
 
         public virtual void CriarRede()
@@ -54,6 +60,8 @@ namespace Analise.Bases
 
         public void PlotarRede(string arquivo)
         {
+            CriarDiretório(_constantes.PastaPlots);
+
             _pysharp.LimparArgumentos();
 
             _pysharp.AdicionarArgumento(ListaNós);
@@ -69,19 +77,32 @@ namespace Analise.Bases
             File.Delete(ListaNós);
         }
 
-        private void CriarDiretórioTemporário()
+        public ListasArquivosDAO RetornarArquivosRede()
         {
-            if (!Directory.Exists(DiretórioTmp))
+            return new ListasArquivosDAO(ListaArestas, ListaNós);
+        }
+
+        public abstract object Clone();
+
+        private void CriarDiretório(string diretório)
+        {
+            if (!Directory.Exists(diretório))
             {
-                Directory.CreateDirectory(DiretórioTmp);
+                Directory.CreateDirectory(diretório);
             }
         }
 
         private void CriarArquivoListaArestas()
         {
             _listaArestas = $"{ObterNomeArquivo(_constantes.BaseNomeListaArestas)}{_constantes.Extensão}";
-            File.Create(ListaArestas);
+            CriarArquivo(ListaArestas);
 
+        }
+
+        private void CriarArquivoListaNós()
+        {
+            _listaNós = $"{ObterNomeArquivo(_constantes.BaseNomeListaNós)}{_constantes.Extensão}";
+            CriarArquivo(ListaNós);
         }
 
         private string ObterNomeArquivo(string baseNome)
@@ -95,10 +116,28 @@ namespace Analise.Bases
             return baseNome;
         }
 
-        private void CriarArquivoListaNós()
+        private void InicializarPython(string caminhoPython, string caminhoRede, string executávelPython)
         {
-            _listaNós = $"{ObterNomeArquivo(_constantes.BaseNomeListaNós)}{_constantes.Extensão}";
-            File.Create(ListaNós);
+            _pysharp = new Pysharp(caminhoPython, executávelPython);
+            _caminhoRede = caminhoRede;
+            _caminhoPython = caminhoPython;
+            _executávelPython = executávelPython;
+        }
+
+        private void CriarArquivo(string arquivo)
+        {
+            File.Create(arquivo).Close(); //A função Create abre o arquivo criado
+        }
+
+        protected ListasArquivosDAO PréClone()
+        {
+            var listaArestasClone = $"{ObterNomeArquivo(_constantes.BaseNomeListaArestas)}{_constantes.Extensão}";
+            var listaNósClone = $"{ObterNomeArquivo(_constantes.BaseNomeListaNós)}{_constantes.Extensão}";
+
+            File.Copy(ListaArestas, $"{DiretórioTmp}{listaArestasClone}");
+            File.Copy(ListaNós, $"{DiretórioTmp}{listaNósClone}");
+
+            return new ListasArquivosDAO(listaArestasClone, listaNósClone);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Analise.Bibliotecas;
 using Analise.Interfaces;
 using Analise.Redes;
 
@@ -11,7 +12,11 @@ namespace Analise
             using(IRede rede = new DebugRede())
             {
                 rede.CriarRede();
-                //rede.PlotarRede("/codigo/png/plot.png");
+                Console.WriteLine("Rede Criada");
+
+                IAnalisador analisador = new AnalisadorBiblioteca();
+                analisador.AnalisarRede(rede);
+                Console.WriteLine("Rede Analisada");
             }
         }
     }

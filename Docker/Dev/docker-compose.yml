@@ -5,5 +5,5 @@ services:
         container_name: Trabalho.RC
         volumes:
             - C:\\Users\\mathe\\Desktop\\Git\\trabalhorc:/codigo
-            - C:\\Users\\mathe\\Desktop\\Git\\pysharp\\PySharp\\classe:/dlls/pysharp:ro
+            - C:\\Users\\mathe\\Desktop\\Git\\pysharp\\PySharp:/projetos/pysharp
         command: tail -f /dev/null

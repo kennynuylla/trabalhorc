@@ -6,3 +6,4 @@ def PlotarRede(rede, caminhoPlot):
     edge_labels = nx.get_edge_attributes(rede, "latência_efetiva")
     nx.draw(rede, labels=labels, node_size=1000, font_size=20)
     plt.savefig(caminhoPlot)
+    plt.close()
