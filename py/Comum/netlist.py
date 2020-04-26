@@ -5,7 +5,7 @@ def GerarNodeList(localArquivo, rede):
     nós = list(rede.nodes(data=True))
 
     for nó in nós:
-        arquivo.write("%s %d %d\n" %(nó[0], nó[1]["importância"], rede.degree(nó[0])))
+        arquivo.write("%s %d\n" %(nó[0], nó[1]["importância"]))
 
     arquivo.close()
 
