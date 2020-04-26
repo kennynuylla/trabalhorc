@@ -33,7 +33,7 @@ def InserirNodeList(localArquivo, rede):
     for linha in linhas:
         linha = linha.strip()
         linha = linha.split(" ")
-        rede.add_node(linha[0], importância=linha[1])
+        rede.add_node(linha[0], importância=int(linha[1]))
 
 def InserirEdgeList(localArquivo, rede):
     arquivo = open(localArquivo, "r")
@@ -43,4 +43,4 @@ def InserirEdgeList(localArquivo, rede):
     for linha in linhas:
         linha = linha.strip()
         linha = linha.split(" ")
-        rede.add_edge(linha[0], linha[1], latência_efetiva=linha[2])
+        rede.add_edge(linha[0], linha[1], latência_efetiva=float(linha[2]))
