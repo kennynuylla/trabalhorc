@@ -77,6 +77,11 @@ namespace Analise.Bases
             File.Delete(ListaNós);
         }
 
+        public ListasArquivosDAO RetornarArquivosRede()
+        {
+            return new ListasArquivosDAO(ListaArestas, ListaNós);
+        }
+
         public abstract object Clone();
 
         private void CriarDiretório(string diretório)
@@ -124,7 +129,7 @@ namespace Analise.Bases
             File.Create(arquivo).Close(); //A função Create abre o arquivo criado
         }
 
-        protected PréCloneDAO PréClone()
+        protected ListasArquivosDAO PréClone()
         {
             var listaArestasClone = $"{ObterNomeArquivo(_constantes.BaseNomeListaArestas)}{_constantes.Extensão}";
             var listaNósClone = $"{ObterNomeArquivo(_constantes.BaseNomeListaNós)}{_constantes.Extensão}";
@@ -132,7 +137,7 @@ namespace Analise.Bases
             File.Copy(ListaArestas, $"{DiretórioTmp}{listaArestasClone}");
             File.Copy(ListaNós, $"{DiretórioTmp}{listaNósClone}");
 
-            return new PréCloneDAO(listaArestasClone, listaNósClone);
+            return new ListasArquivosDAO(listaArestasClone, listaNósClone);
         }
     }
 }

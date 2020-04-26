@@ -1,4 +1,5 @@
 using System;
+using Analise.DAO;
 
 namespace Analise.Interfaces
 {
@@ -6,5 +7,6 @@ namespace Analise.Interfaces
     {
         void CriarRede();
         void PlotarRede(string arquivo);
+        ListasArquivosDAO RetornarArquivosRede();
     }
 }
