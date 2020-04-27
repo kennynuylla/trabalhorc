@@ -24,8 +24,8 @@ class Aleatório(Rede.Rede):
             nó["cor"] = Constantes.tipos[chave]["cor"]
 
 
-    def montar(self, quanidade_nós):
-        self._g = nx.fast_gnp_random_graph(quanidade_nós, 0.8)
+    def montar(self, quanidade_nós, taxa_conexão):
+        self._g = nx.fast_gnp_random_graph(quanidade_nós, taxa_conexão)
         nós = self._g.nodes(data=True)
         self._adicionar_tipo(nós[0], True)
 
