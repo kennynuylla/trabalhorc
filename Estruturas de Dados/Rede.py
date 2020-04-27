@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-import networkx as nx, matplotlib.pyplot as plt, Constantes, pandas as pd
+import networkx as nx, matplotlib.pyplot as plt, Constantes, pandas as pd, numpy as np
 
 from Exceptions import *
 
@@ -78,6 +78,13 @@ class Rede(ABC):
 
         nx.draw(self._g, with_labels=True, font_weight='bold', node_color=color_map)
         plt.savefig("./Saída/grafo.png")
+
+    def exportarCSV(self):
+        df = pd.DataFrame({"Probabilidade":self._análise_falha_aleatória.probabilidades,
+                           "Importâncias":self._análise_falha_aleatória.importâncias,
+                           "Latência":self._análise_falha_aleatória.latências})
+
+        df.to_csv("./Saída/falha_aleatória.csv", sep=";")
 
     def gerar_gráficos_resiliência(self):
         plt.figure(figsize=(16,16), dpi=256)
