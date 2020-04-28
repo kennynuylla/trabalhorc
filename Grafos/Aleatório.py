@@ -43,14 +43,12 @@ class Aleatório(Rede.Rede):
 
             aresta[2]["latência"] = latência
             aresta[2]["latência_efetiva"] = latência_efetiva
-            aresta[2]["transmissão_média"] = transmissão
-            aresta[2]["transmissão_máxima"] = transmissão_máxima
 
         self.latência_efetiva_média = nx.average_shortest_path_length(self._g, weight="latência_efetiva")
 
     def analisar(self, quantidade_repetições, quantidade_probabilidades):
-        self._análise_falha_aleatória = AnáliseResultadosDAO.AnáliseResultadosDAO(*Analisador.gerar_pontos_resiliência(self._g, quantidade_repetições,
+        self._análise_falha_aleatória = AnáliseResultadosDAO.AnáliseResultadosDAO(*Analisador.gerar_pontos_falha(self._g, quantidade_repetições,
             quantidade_probabilidades))
 
-        self._análise_falha_ataque = AnáliseResultadosDAO.AnáliseResultadosDAO(np.random.rand(quantidade_probabilidades), 
-            np.random.rand(quantidade_probabilidades), np.linspace(0,1,quantidade_probabilidades))
+        self._análise_falha_ataque = AnáliseResultadosDAO.AnáliseResultadosDAO(*Analisador.gerar_pontos_ataque(self._g, quantidade_repetições,
+            quantidade_probabilidades))
