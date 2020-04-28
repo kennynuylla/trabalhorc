@@ -26,8 +26,6 @@ def remover_nós_falha(rede, probabilidade):
         if(np.random.rand() < probabilidade):
             para_deletar.append(nó)
 
-        
-
     rede.remove_nodes_from(para_deletar)
 
 def encontrar_maior_cluster(componentes, rede):

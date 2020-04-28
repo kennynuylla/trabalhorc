@@ -24,9 +24,14 @@ class Aleatório(Rede.Rede):
             nó["cor"] = Constantes.tipos[chave]["cor"]
 
 
-    def montar(self, quantidade_nós, taxa_conexão):
-        self._g = nx.fast_gnp_random_graph(quantidade_nós, taxa_conexão)
-        print("Debug: qtd_nós = %d e taxa = %f" %(quantidade_nós, taxa_conexão))
+    def montar(self, tipo, quantidade_nós, taxa_conexão):
+        if(tipo == "gnp"):
+            self._g = nx.fast_gnp_random_graph(quantidade_nós, taxa_conexão)
+            print("G(n,p): qtd_nós = %d e taxa = %f" %(quantidade_nós, taxa_conexão))
+        else:
+            self._g = nx.scale_free_graph(quantidade_nós).to_undirected()
+            print("Livre de Escala: qtd_nós = %d" %(quantidade_nós))
+
         nós = self._g.nodes(data=True)
         self._adicionar_tipo(nós[0], True)
 
