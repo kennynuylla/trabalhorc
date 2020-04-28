@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-import networkx as nx, matplotlib.pyplot as plt, Constantes, pandas as pd
+import networkx as nx, matplotlib.pyplot as plt, Constantes, pandas as pd, numpy as np
 
 from Exceptions import *
 
@@ -79,6 +79,15 @@ class Rede(ABC):
         nx.draw(self._g, with_labels=True, font_weight='bold', node_color=color_map)
         plt.savefig("./Saída/grafo.png")
 
+    def exportarCSV(self):
+        df = pd.DataFrame({"Probabilidade":self._análise_falha_aleatória.probabilidades,
+                           "ImportânciasFalha":self._análise_falha_aleatória.importâncias,
+                           "LatênciasFalha":self._análise_falha_aleatória.latências,
+                           "ImportânciasAtaque": self._análise_falha_ataque.importâncias,
+                           "LatênciasAtaque": self._análise_falha_ataque.latências})
+
+        df.to_csv("./Saída/falha_aleatória.csv", sep=";")
+
     def gerar_gráficos_resiliência(self):
         plt.figure(figsize=(16,16), dpi=256)
         plt.rcParams.update({'font.size': 22})
@@ -87,7 +96,6 @@ class Rede(ABC):
 
         plt.subplot(2,1,1)
         plt.title("Importância x Probabilidade de Remoção")
-        #plt.plot(self._análise_falha_aleatória.importâncias, self._análise_falha_aleatória.probabilidades, "ro")
         plt.plot(self._análise_falha_aleatória.probabilidades, self._análise_falha_aleatória.importâncias, "ro")
         plt.xlabel("Probabilidade de Remoção")
         plt.ylabel("Importância (Normalizada)")
@@ -95,7 +103,6 @@ class Rede(ABC):
 
         plt.subplot(2,1,2)
         plt.title("Latência Efetiva Média x Probabilidade de Remoção")
-        #plt.plot(self._análise_falha_aleatória.latências, self._análise_falha_aleatória.probabilidades, "bo")
         plt.plot(self._análise_falha_aleatória.probabilidades, self._análise_falha_aleatória.latências, "bo")
         plt.xlabel("Probabilidade de Remoção")
         plt.ylabel("Latência Efetiva Média (Normalizada)")
