@@ -81,8 +81,10 @@ class Rede(ABC):
 
     def exportarCSV(self):
         df = pd.DataFrame({"Probabilidade":self._análise_falha_aleatória.probabilidades,
-                           "Importâncias":self._análise_falha_aleatória.importâncias,
-                           "Latência":self._análise_falha_aleatória.latências})
+                           "ImportânciasFalha":self._análise_falha_aleatória.importâncias,
+                           "LatênciasFalha":self._análise_falha_aleatória.latências,
+                           "ImportânciasAtaque": self._análise_falha_ataque.importâncias,
+                           "LatênciasAtaque": self._análise_falha_ataque.latências})
 
         df.to_csv("./Saída/falha_aleatória.csv", sep=";")
 
@@ -94,7 +96,6 @@ class Rede(ABC):
 
         plt.subplot(2,1,1)
         plt.title("Importância x Probabilidade de Remoção")
-        #plt.plot(self._análise_falha_aleatória.importâncias, self._análise_falha_aleatória.probabilidades, "ro")
         plt.plot(self._análise_falha_aleatória.probabilidades, self._análise_falha_aleatória.importâncias, "ro")
         plt.xlabel("Probabilidade de Remoção")
         plt.ylabel("Importância (Normalizada)")
@@ -102,7 +103,6 @@ class Rede(ABC):
 
         plt.subplot(2,1,2)
         plt.title("Latência Efetiva Média x Probabilidade de Remoção")
-        #plt.plot(self._análise_falha_aleatória.latências, self._análise_falha_aleatória.probabilidades, "bo")
         plt.plot(self._análise_falha_aleatória.probabilidades, self._análise_falha_aleatória.latências, "bo")
         plt.xlabel("Probabilidade de Remoção")
         plt.ylabel("Latência Efetiva Média (Normalizada)")
