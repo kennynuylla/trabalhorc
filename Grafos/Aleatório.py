@@ -51,3 +51,6 @@ class Aleatório(Rede.Rede):
     def analisar(self, quantidade_repetições, quantidade_probabilidades):
         self._análise_falha_aleatória = AnáliseResultadosDAO.AnáliseResultadosDAO(*Analisador.gerar_pontos_resiliência(self._g, quantidade_repetições,
             quantidade_probabilidades))
+
+        self._análise_falha_ataque = AnáliseResultadosDAO.AnáliseResultadosDAO(np.random.rand(quantidade_probabilidades), 
+            np.random.rand(quantidade_probabilidades), np.linspace(0,1,quantidade_probabilidades))
